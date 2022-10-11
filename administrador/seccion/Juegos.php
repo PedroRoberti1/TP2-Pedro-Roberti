@@ -6,44 +6,24 @@ $txtID=(isset($_POST['txtID']))?$_POST["txtID"]:"";
 $txtNombre=(isset($_POST['txtNombre']))?$_POST['txtNombre']:'';
 $txtEstado=(isset($_POST['txtEstado']))?$_POST['txtEstado']:'';
 $txtCrack=(isset($_POST['txtCrack']))?$_POST['txtCrack']:'';
-
 $txtImagen=(isset($_FILES['txtImagen']['name']))?$_FILES["txtImagen"]['name']:"";
 $accion=(isset($_POST['accion']))?$_POST["accion"]:"";
 
-echo $txtID."<br/>";
-echo $txtNombre."<br/>";
-echo $txtEstado."<br/>";
-echo $txtCrack."<br/>";
-echo $txtImagen."<br/>";
-echo $accion."<br/>"; 
-
-$host="localhost";
-$db="crackwatch";
-$usuario="root";
-$contrasenia="";
-
-try {
-        $conexion= new PDO("mysql:host=$host;dbname=$db",$usuario,$contrasenia);
-        if($conexion) { echo "Conectado... a sistema";}
-} catch (Exception $ex) {
+include("../config/db.php"); 
 
 
-    echo $ex->getMessage();
-}
+
 
 switch($accion){
     case "Agregar":
 
-
-        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `nombre_juego`, `imagen_juego`, `estado`, `crack_by`) VALUES (NULL, 'Call of duty', 'Imagen.jpg', 'Crackeado', 'Codex');");
-
-        echo "Presionado boton agregar";
+        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `Nombre`, `Imagen`, `Estado`, `Crack_by:`) VALUES (NULL,:Nombre,:imagen,:Estado,:Crackby);");
+        $sentenciaSQL->bindParam(':Nombre',$txtNombre);
+        $sentenciaSQL->bindParam(':imagen',$txtImagen);
+        $sentenciaSQL->bindParam(':Estado',$txtEstado);
+        $sentenciaSQL->bindParam(':Crackby',$txtCrack);
 
         $sentenciaSQL->execute();
-
-
-
-
 
         break;
     case "Modificar":
@@ -55,6 +35,9 @@ switch($accion){
     break;
 }
 
+$sentenciaSQL=$conexion->prepare('SELECT * FROM juegos');
+$sentenciaSQL->execute();
+$listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
 ?>
 
 <div class="col-md-5">
@@ -115,16 +98,23 @@ switch($accion){
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Imagen</th>
+                <th>Estado</th>
+                <th>Crack by:</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
+            <?php foreach($listaJuegos as $juego) { ?>
             <tr>
-                <td>2</td>
-                <td>Juego</td>
-                <td>imagen.jpg</td>
+                <td><?php echo $juego['id']; ?></td>
+                <td><?php echo $juego['Nombre']; ?></td>
+                <td><?php echo $juego['Imagen']; ?></td>
+                <td><?php echo $juego['Estado']; ?></td>
+                <td><?php echo $juego['Crack_by:']; ?></td>
+                
                 <td>Seleccionar | Borrar</td>
             </tr>
+            <?php } ?>
         </tbody>
     </table>
 </div>
