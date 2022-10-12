@@ -17,17 +17,46 @@ include("../config/db.php");
 switch($accion){
     case "Agregar":
 
-        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `Nombre`, `Imagen`, `Estado`, `Crack_by:`) VALUES (NULL,:Nombre,:imagen,:Estado,:Crackby);");
+        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `Nombre`, `Imagen`, `Estado`, `Crack_by`) VALUES (NULL,:Nombre,:imagen,:Estado,:Crack_by);");
         $sentenciaSQL->bindParam(':Nombre',$txtNombre);
+
+        $fecha= new DateTime();
+        $nombreArchivo=($txtImagen!="")?$fecha-
+
         $sentenciaSQL->bindParam(':imagen',$txtImagen);
         $sentenciaSQL->bindParam(':Estado',$txtEstado);
-        $sentenciaSQL->bindParam(':Crackby',$txtCrack);
+        $sentenciaSQL->bindParam(':Crack_by',$txtCrack);
 
         $sentenciaSQL->execute();
 
         break;
     case "Modificar":
-        echo "Presionado boton Modificar";
+
+        $sentenciaSQL=$conexion->prepare('UPDATE juegos set Nombre=:Nombre WHERE id=:id');
+        $sentenciaSQL->bindParam(':Nombre',$txtNombre);
+        $sentenciaSQL->bindParam(':id',$txtID);
+        $sentenciaSQL->execute();
+
+        if ($txtImagen!="") {
+            $sentenciaSQL=$conexion->prepare('UPDATE juegos set imagen=:imagen WHERE id=:id');
+            $sentenciaSQL->bindParam(':imagen',$txtImagen);
+            $sentenciaSQL->bindParam(':id',$txtID);
+            $sentenciaSQL->execute();
+        }
+
+        if ($txtEstado!="") {
+            $sentenciaSQL=$conexion->prepare('UPDATE juegos set Estado=:Estado WHERE id=:id');
+            $sentenciaSQL->bindParam(':Estado',$txtEstado);
+            $sentenciaSQL->bindParam(':id',$txtID);
+            $sentenciaSQL->execute();
+        }
+        if ($txtCrack!="") {
+            $sentenciaSQL=$conexion->prepare('UPDATE juegos set Crack_by=:Crack_by WHERE id=:id');
+            $sentenciaSQL->bindParam(':Crack_by',$txtCrack);
+            $sentenciaSQL->bindParam(':id',$txtID);
+            $sentenciaSQL->execute();
+        }
+
         break;
     
     case "Cancelar":
@@ -44,7 +73,7 @@ switch($accion){
         $txtNombre=$juego['Nombre'];
         $txtImagen=$juego['Imagen'];
         $txtEstado=$juego['Estado'];
-        $txtCrack=$juego['Crack_by:'];
+        $txtCrack=$juego['Crack_by'];
         // echo "Presionado boton Seleccionar";
         break;
     
@@ -134,7 +163,7 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
                 <td><?php echo $juego['Nombre']; ?></td>
                 <td><?php echo $juego['Imagen']; ?></td>
                 <td><?php echo $juego['Estado']; ?></td>
-                <td><?php echo $juego['Crack_by:']; ?></td>
+                <td><?php echo $juego['Crack_by']; ?></td>
 
                 <td>
 
