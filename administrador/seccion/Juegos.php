@@ -87,11 +87,11 @@ switch($accion){
             $sentenciaSQL->bindParam(':id',$txtID);
             $sentenciaSQL->execute();
         }
-
+        header("Location:juegos.php");
         break;
     
     case "Cancelar":
-    echo "Presionado boton Cancelar";
+        header("Location:juegos.php");
     break;
 
     case 'Seleccionar':
@@ -131,6 +131,7 @@ switch($accion){
         $sentenciaSQL=$conexion->prepare('DELETE FROM juegos WHERE id=:id');
         $sentenciaSQL->bindParam(':id',$txtID);
         $sentenciaSQL->execute();
+        header("Location:juegos.php");
         break;
 }
 
@@ -151,25 +152,33 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
 
                 <div class= "form-group">
                     <label for="txtID">ID:</label>
-                    <input type="text" class="form-control" value="<?php echo $txtID; ?>" name="txtID" id="txtID" placeholder="ID">
+                    <input type="text" required readonly class="form-control" value="<?php echo $txtID; ?>" name="txtID" id="txtID" placeholder="ID">
                 </div>
 
                 <div class= "form-group">
                     <label for="txtNombre">Nombre</label>
-                    <input type="text" class="form-control" value="<?php echo $txtNombre; ?>"  name="txtNombre" id="txtNombre" placeholder="Nombre">
+                    <input type="text" required class="form-control" value="<?php echo $txtNombre; ?>"  name="txtNombre" id="txtNombre" placeholder="Nombre">
                 </div>
 
                 <div class= "form-group">
                     <label for="txtNombre">Imagen: </label>
 
-                    <?php echo $txtImagen;?>
+                    <br/>
+
+                    <?php
+
+                    if($txtImagen!=""){  ?>
+
+                    <img class="img-thumbnail rounded" src="../../img/<?php echo $txtImagen;?>" width="100" alt="">    
+
+                    <?php }    ?>
 
                     <input type="file" class="form-control" name="txtImagen" id="txtImagen" placeholder="NombreImagen">
                 </div>
 
                 <div class= "form-group">
                     <label for="txtEstado">Estado</label>
-                    <input type="text" class="form-control" value="<?php echo $txtEstado; ?>" name="txtEstado" id="txtEstado" placeholder="Estado">
+                    <input type="text" required class="form-control" value="<?php echo $txtEstado; ?>" name="txtEstado" id="txtEstado" placeholder="Estado">
                 </div>
 
                 <div class= "form-group">
@@ -179,9 +188,9 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
                 
 
                 <div class="btn-group" role="group" aria-label="">
-                    <button type="submit" name="accion"  value="Agregar"   class="btn btn-success">Agregar</button>
-                    <button type="submit" name="accion"  value="Modificar"  class="btn btn-warning">Modificar</button>
-                    <button type="submit" name="accion"  value="Cancelar" class="btn btn-info">Cancelar</button>
+                    <button type="submit" name="accion" <?php echo ($accion=="Seleccionar")?"disable":""; ?> value="Agregar"   class="btn btn-success">Agregar</button>
+                    <button type="submit" name="accion" ($accion!="Seleccionar")?"disable":"";  value="Modificar"  class="btn btn-warning">Modificar</button>
+                    <button type="submit" name="accion" ($accion=="Seleccionar")?"disable":""; value="Cancelar" class="btn btn-info">Cancelar</button>
                 </div>
 
 
@@ -213,7 +222,7 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
 
                 <td>
 
-                <img src="../../img/<?php echo $juego['Imagen']; ?>" width="100" alt="">    
+                <img class="img-thumbnail rounded" src="../../img/<?php echo $juego['Imagen']; ?>" width="110" alt="">    
                 
                 </td>
                 <td><?php echo $juego['Estado']; ?></td>
