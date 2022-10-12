@@ -17,13 +17,21 @@ include("../config/db.php");
 switch($accion){
     case "Agregar":
 
-        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `Nombre`, `Imagen`, `Estado`, `Crack_by`) VALUES (NULL,:Nombre,:imagen,:Estado,:Crack_by);");
+        $sentenciaSQL=$conexion->prepare("INSERT INTO `juegos` (`id`, `Nombre`, `Imagen`, `Estado`, `Crack_by`) VALUES (NULL,:Nombre,:Imagen,:Estado,:Crack_by);");
         $sentenciaSQL->bindParam(':Nombre',$txtNombre);
 
         $fecha= new DateTime();
-        $nombreArchivo=($txtImagen!="")?$fecha-
+        $nombreArchivo=($txtImagen!="")?$fecha->getTimestamp()."_".$_FILES["txtImagen"]["name"]:"Imagen.jpg";
 
-        $sentenciaSQL->bindParam(':imagen',$txtImagen);
+        $tmpImagen=$_FILES["txtImagen"]["tmp_name"];
+
+        if($tmpImagen!=""){
+
+            move_uploaded_file($tmpImagen,"../../img/".$nombreArchivo);
+        }
+
+        $sentenciaSQL->bindParam(':Imagen',$nombreArchivo);
+
         $sentenciaSQL->bindParam(':Estado',$txtEstado);
         $sentenciaSQL->bindParam(':Crack_by',$txtCrack);
 
@@ -37,9 +45,32 @@ switch($accion){
         $sentenciaSQL->bindParam(':id',$txtID);
         $sentenciaSQL->execute();
 
+
         if ($txtImagen!="") {
-            $sentenciaSQL=$conexion->prepare('UPDATE juegos set imagen=:imagen WHERE id=:id');
-            $sentenciaSQL->bindParam(':imagen',$txtImagen);
+
+            $fecha= new DateTime();
+            $nombreArchivo=($txtImagen!="")?$fecha->getTimestamp()."_".$_FILES["txtImagen"]["name"]:"Imagen.jpg";
+            $tmpImagen=$_FILES["txtImagen"]["tmp_name"];
+
+            move_uploaded_file($tmpImagen,"../../img/".$nombreArchivo);
+
+            
+            $sentenciaSQL=$conexion->prepare('SELECT Imagen FROM juegos WHERE id=:id');
+            $sentenciaSQL->bindParam(':id',$txtID);
+            $sentenciaSQL->execute();
+            $juego=$sentenciaSQL->fetch(PDO::FETCH_LAZY);
+
+            if(isset($juego["Imagen"]) &&($juego["Imagen"]!="Imagen.jpg")){
+
+                if(file_exists("../../img/".$juego["Imagen"])){
+
+                    unlink("../../img/".$juego["Imagen"]);
+                }
+            }
+
+
+            $sentenciaSQL=$conexion->prepare('UPDATE juegos set Imagen=:Imagen WHERE id=:id');
+            $sentenciaSQL->bindParam(':Imagen',$nombreArchivo);
             $sentenciaSQL->bindParam(':id',$txtID);
             $sentenciaSQL->execute();
         }
@@ -78,10 +109,28 @@ switch($accion){
         break;
     
     case 'Borrar':
+        
+
+
+        $sentenciaSQL=$conexion->prepare('SELECT Imagen FROM juegos WHERE id=:id');
+        $sentenciaSQL->bindParam(':id',$txtID);
+        $sentenciaSQL->execute();
+        $juego=$sentenciaSQL->fetch(PDO::FETCH_LAZY);
+
+        if(isset($juego["Imagen"]) &&($juego["Imagen"]!="Imagen.jpg")){
+
+            if(file_exists("../../img/".$juego["Imagen"])){
+
+                unlink("../../img/".$juego["Imagen"]);
+            }
+        }
+
+
+
+
         $sentenciaSQL=$conexion->prepare('DELETE FROM juegos WHERE id=:id');
         $sentenciaSQL->bindParam(':id',$txtID);
         $sentenciaSQL->execute();
-        // echo "Presionado boton Borrar";
         break;
 }
 
@@ -94,7 +143,7 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
 
     <div class="card">
         <div class="card-header">
-            Datos de libro
+            Datos de juego
         </div>
 
         <div class="card-body">
@@ -111,7 +160,7 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class= "form-group">
-                    <label for="txtNombre">imagen: </label>
+                    <label for="txtNombre">Imagen: </label>
 
                     <?php echo $txtImagen;?>
 
@@ -161,7 +210,12 @@ $listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
             <tr>
                 <td><?php echo $juego['id']; ?></td>
                 <td><?php echo $juego['Nombre']; ?></td>
-                <td><?php echo $juego['Imagen']; ?></td>
+
+                <td>
+
+                <img src="../../img/<?php echo $juego['Imagen']; ?>" width="100" alt="">    
+                
+                </td>
                 <td><?php echo $juego['Estado']; ?></td>
                 <td><?php echo $juego['Crack_by']; ?></td>
 
