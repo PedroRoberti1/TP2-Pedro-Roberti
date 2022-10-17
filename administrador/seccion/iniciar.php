@@ -1,3 +1,12 @@
+<?php
+
+require "../config/db.php";
+
+?>
+
+
+
+
 <!DOCTYPE html>
 
 
@@ -11,10 +20,10 @@
 </head>
 
 <body>
-<?php require '../partials/header.php' ?>
+    <?php require '../partials/header.php' ?>
 
-<h1>Iniciar</h1>
-<span>o <a href="login.php">Registrar</a></span>
+    <h1>Iniciar</h1>
+    <span>o <a href="registrar.php">Registrar</a></span>
 
     <form action="iniciar.php" method="POST">
         <input name="email" type="text" placeholder="Ingresa tu mail">

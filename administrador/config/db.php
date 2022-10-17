@@ -6,10 +6,10 @@ $contrasenia="";
 try {
         $conexion= new PDO("mysql:host=$host;dbname=$db",$usuario,$contrasenia);
 
-} catch (Exception $ex) {
+} catch (PDOException $e) {
 
 
-    echo $ex->getMessage();
+    die("Connected failed: ".$e->getMessage());
 }
 
 ?>

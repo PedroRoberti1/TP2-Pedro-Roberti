@@ -1,3 +1,27 @@
+<?php
+
+require "../config/db.php";
+
+?>
+
+<?php
+
+$message = '';
+
+if (!empty($_POST['email']) && !empty($_POST['clave'])) {
+    $sql = "INSERT INTO usuarios (email, clave) VALUES (:email, :clave)";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bindParam(':email', $_POST['email']);
+    $clave = password_hash($_POST['clave'], PASSWORD_DEFAULT);
+    $stmt->bindParam(':clave', $clave);
+
+    if ($stmt->execute()) {
+        $message = 'Successfully created new user';
+    } else {
+        $message = 'Sorry there must have been an issue creating your account';
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -10,14 +34,21 @@
 
 <body>
 
-    <?php require '../partials/header.php' ?>
+<?php require '../partials/header.php' ?>
 
-    <h1>Registrar</h1>
-    <span>o <a href="login.php">Ingresa</a></span>
+    <?php if (!empty($message)) : ?>
+        <p> <?= $message ?></p>
+    <?php endif; ?>
+
+    <h1>SignUp</h1>
+    <span>o <a href="iniciar.php">Ingresa</a></span>
+
+
     <form action="registrar.php" method="POST">
-            <input name="email" type="text" placeholder="Ingresa tu mail">
-            <input name="clave" type="contraseña" class="form-control form-control-lg" placeholder="Ingresa tu contraseña"><br>
-            <input type="submit" value="send">
+        <input name="email" type="text" placeholder="Enter your email">
+        <input name="clave" type="password" placeholder="Enter your clave">
+        <br> <br> <br>
+        <input type="submit" value="Submit">
     </form>
 
 </body>
