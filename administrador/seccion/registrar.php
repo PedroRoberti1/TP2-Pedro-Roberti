@@ -12,7 +12,7 @@ if (!empty($_POST['email']) && !empty($_POST['clave'])) {
     $sql = "INSERT INTO usuarios (email, clave) VALUES (:email, :clave)";
     $stmt = $conexion->prepare($sql);
     $stmt->bindParam(':email', $_POST['email']);
-    $clave = password_hash($_POST['clave'], PASSWORD_DEFAULT);
+    $clave = password_hash($_POST['clave'], PASSWORD_BCRYPT);
     $stmt->bindParam(':clave', $clave);
 
     if ($stmt->execute()) {

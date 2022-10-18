@@ -1,3 +1,3 @@
 <header>
-    <a href="../index.php">CrackWatch</a>
+    <a href="inicio.php">CrackWatch</a>
 </header> 

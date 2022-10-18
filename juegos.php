@@ -1,5 +1,11 @@
 <?php include("template/navbar.php");?>
 
+<?php
+
+include ("administrador/config/db.php");
+?>
+
+
 <div class="col-md-3">
 
 <div class="card">
@@ -13,7 +19,7 @@
 
 </div>
 
-</div>
+</div> 
 
 <div class="col-md-3">
 
