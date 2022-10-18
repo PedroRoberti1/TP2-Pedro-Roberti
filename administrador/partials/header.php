@@ -1,3 +1,5 @@
+<?php $url="http://". $_SERVER["HTTP_HOST"]."/tp-2"?>
+
 <header>
-    <a href="inicio.php">CrackWatch</a>
+<a class="nav-item nav-link" href="../index.php">CrackWatch</a>
 </header> 

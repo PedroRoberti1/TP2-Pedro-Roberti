@@ -3,68 +3,31 @@
 <?php
 
 include ("administrador/config/db.php");
+
+$sentenciaSQL=$conexion->prepare('SELECT * FROM juegos');
+$sentenciaSQL->execute();
+$listaJuegos=$sentenciaSQL->fetchall(PDO::FETCH_ASSOC);
 ?>
 
-
+<?php foreach($listaJuegos as $juego) {?>
 <div class="col-md-3">
 
 <div class="card">
 
-    <img class="card-img-top" src="./img/Juego1.jpg" alt="">
+    <img class="card-img-top" src="./img/<?php echo $juego['Imagen']; ?>" alt="">
 
     <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Ver estado del juego</a>
+        <h1 class="card-title"><?php echo $juego['Nombre']; ?></h1>
+        <h5 class="card-title"><?php echo $juego['Estado']; ?></h5>
+        <h6 class="card-title">Crack by:<?php echo $juego['Crack_by']; ?></h6>
 </div>
 
 </div>
 
 </div> 
 
-<div class="col-md-3">
+<?php } ?>
 
-<div class="card">
-
-    <img class="card-img-top" src="./img/Juego2.jpg" alt="">
-
-    <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">Text</p>
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-3">
-
-<div class="card">
-
-    <img class="card-img-top" src="./img/Juego3.jpg" alt="">
-
-    <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">Text</p>
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-3">
-
-<div class="card">
-
-    <img class="card-img-top" src="./img/Juego4.jpg" alt="">
-
-    <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">Text</p>
-</div>
-
-</div>
-
-</div>
 
 
 

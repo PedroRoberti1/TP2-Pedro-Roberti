@@ -31,10 +31,14 @@ if (isset($_SESSION['user_id'])) {
     <?php require 'partials/header.php' ?>
 
     <?php if (!empty($usuarios)) : ?>
-        <br> Welcome. <?= $usuarios['email']; ?>
-        <br>Te conectaste exitosamente
+        <br> Bienvenido. <?= $usuarios['email']; ?>
+        <br>Estas conectado exitosamente
+        <a href="inicio.php">
+            Inicio
+        </a>
+        <p>o</p>
         <a href="./seccion/cerrar.php">
-            Cerrar
+            Cerrar sesion
         </a>
     <?php else : ?>
         <h1>Por favor, ingresa o registrate</h1>

@@ -3,7 +3,7 @@
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: /php-login');
+    header('Location: iniciar.php');
 }
 
 
@@ -21,7 +21,7 @@ if (!empty($_POST['email']) && !empty($_POST['clave'])) {
         $_SESSION['user_id'] = $results['id'];
         header('Location: ../inicio.php');
     } else {
-        $message = 'Sorry, those credentials do not match';
+        $message = 'Error al autentificar, las credenciales no coinciden.';
     }
 }
 
@@ -44,8 +44,8 @@ if (!empty($_POST['email']) && !empty($_POST['clave'])) {
         <p> <?= $message ?></p>
     <?php endif; ?>
 
-    <h1>Login</h1>
-    <span>or <a href="registrar.php">Registrarse</a></span>
+    <h1>Ingresar</h1>
+    <span>o <a href="registrar.php">Registrarse</a></span>
 
     <form action="iniciar.php" method="POST">
         <input name="email" type="text" placeholder="Enter your email">
