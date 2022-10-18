@@ -8,6 +8,7 @@ body {
 
 /* Input Forms*/
 input[type="text"],
+input[type="email"],
 input[type="password"] {
     outline: none;
     padding: 20px;

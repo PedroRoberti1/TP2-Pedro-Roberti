@@ -48,7 +48,7 @@ if (!empty($_POST['email']) && !empty($_POST['clave'])) {
     <span>o <a href="registrar.php">Registrarse</a></span>
 
     <form action="iniciar.php" method="POST">
-        <input name="email" type="text" placeholder="Enter your email">
+        <input name="email" type="email" placeholder="Enter your email">
         <input name="clave" type="password" placeholder="Enter your clave">
         <input type="submit" value="Submit">
     </form>
